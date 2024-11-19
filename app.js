@@ -1,22 +1,24 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function(){
     const btn = document.getElementById("searchBtn");
-
-        const shr = new XMLHttpRequest();
-        const link = "http://localhost/info2180-lab4/superheroes.php";
-        
-        shr.open('GET', link, true);
-        shr.send();
+    const ui = document.getElementById("search");
+    const result = document.getElementById("result");
 
         function SuperLst(){
-            if (shr.readyState === XMLHttpRequest.DONE) {
-                if (shr.status === 200) {
-                    const rsp = xhr.responseText;
-                    alert(rsp);
-                } else {
-                    alert("Your request could not be processed");
+            const uq = ui.value.trim().toLowerCase();
+            const shr = new XMLHttpRequest();           
+            shr.open('GET',  `superheroes.php?query=${encodeURIComponent(uq)}`, true);
+            shr.send();
+            shr.onreadystatechange = function(){
+                if (shr.readyState === XMLHttpRequest.DONE) {
+                    if (shr.status === 200) {
+                        const rsp = shr.responseText;
+                        result.innerHTML = rsp;
+                    } 
+                    else {
+                        alert("Your request could not be processed");
                 }
             }
         }
-
-        btn.addEventListener('click', SuperLst)
+    }  
+    btn.addEventListener('click', SuperLst);
 });
